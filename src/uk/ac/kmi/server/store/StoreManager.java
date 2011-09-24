@@ -1,6 +1,8 @@
 package uk.ac.kmi.server.store;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Vector;
 
 import uk.ac.kmi.server.store.URI;
 
@@ -14,4 +16,6 @@ public interface StoreManager {
 	//method
 	public void store(URI apiUri, String surveyId, URI userId, URI surveyPropertyName, String surveyProperyValue, Date time);// throws LogException;
 	//logger.store(agentUri, processId, classifiedItem, documentUri, "http://www.soa4all.eu/Save/" + element, new Date(), method);
+	
+	public void store(URI apiUri, String surveyId, URI userId, HashMap<String, String[]> parameters, Date time);// throws LogException;
 }

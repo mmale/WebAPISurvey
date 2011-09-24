@@ -35,10 +35,11 @@ public class APIs extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		
 		// retrieve the method requested
-		String index = request.getParameter("index");
-		
+		String index = request.getParameter("index");		
 		//For testing only!
-		index = "2";
+		//if (index == null) index = "2";
+		
+		String URI = request.getParameter("URI");		
 		
 		
 		// initialize the result variable
@@ -46,28 +47,45 @@ public class APIs extends HttpServlet {
 		String apiURL =  "No URL!";
 		String apiDesc = "No description!";
 		String apiHome = "No home URL!";
+		String apiName = "Untitled!";
+		String apiLastUp = "n/a";
 		
 		QueryResultTable classesResult = null;
 		
 		try {
-			int i = Integer.parseInt(index);
-
+			int i = 0;
+			
 			PWAPIs apis = new PWAPIs();
-			apiResult = apis.getAPIsbyIndex(i);
+			
+			if (index != null) {
+				i = Integer.parseInt(index);
+				apiResult = apis.getAPIsbyIndex(i);
+			} else if (URI != null) {
+				apiResult = apis.getAPIsbyURI(URI);
+			}
+			
 		} catch (RDFRepositoryException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		if( apiResult.toString() != null){
-			apiURL = apiResult.getValue("api").toString();
+			if (URI != null) {
+				apiURL = URI;
+			} else apiURL = apiResult.getValue("api").toString();
+			
 			apiDesc = apiResult.getValue("desc").toString();
 			apiHome = apiResult.getValue("home").toString();
+			apiName = apiResult.getValue("name").toString();
+			apiLastUp = apiResult.getLiteralValue("lastUp").toString();
 		}
 		
 		request.setAttribute("api.url",apiURL );
 		request.setAttribute("api.desc",apiDesc );
 		request.setAttribute("api.home",apiHome );
+		request.setAttribute("api.name",apiName );
+		request.setAttribute("api.lastUpdated",apiLastUp );
+		
 		
 		if( session != null ) {
 			session.setAttribute("apiURL", apiHome);
@@ -95,21 +113,29 @@ public class APIs extends HttpServlet {
 				caregoryURL = row.getValue("c").toString();
 				
 				if(i > 0){
-					allClassesHTML  = allClassesHTML + 
-					"<input type='checkbox' name='apiClasses' value='" +
-					caregoryURL + "' id='" + i + "' /> " +
-					category + "<br />";
+//					allClassesHTML  = allClassesHTML + 
+//					"<input type='checkbox' name='apiClasses' value='" +
+//					caregoryURL + "' id='" + i + "' /> " +
+//					category + "<br />";
+//					
+					allClassesHTML += "<label><input type='checkbox' name='apiClasses' value='"
+						+ caregoryURL
+						+ "' id='cat"
+						+ i
+						+ "'>"
+						+ category
+						+ "</label>";
 				}
 				
 				i++;
 			}
 		}
 		
-		allClassesHTML = allClassesHTML + "<input type='submit' value='Submit' /> </form>";
+		//allClassesHTML = allClassesHTML + "<input type='submit' value='Submit' /> </form>";
 		
 		request.setAttribute("classes.all",allClassesHTML );
 		
-		request.getRequestDispatcher("/showAPIs.jsp").forward(request,response);
+		request.getRequestDispatcher("/showAPIs2.jsp").forward(request,response);
 		
 	}
 

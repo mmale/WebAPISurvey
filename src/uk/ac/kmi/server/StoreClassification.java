@@ -29,9 +29,67 @@ public class StoreClassification extends HttpServlet {
     }
 
 	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//processRequestOld(request, response);
+		processRequest(request, response);
+	}
+
+	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html");
+		HttpSession session = request.getSession(true);
+	    //PrintWriter out = response.getWriter();
+	    //showVariablesInHTML(request, out);
+	    
+	    String processId = "http://www.kmi.open.ac.uk/survey/sessionLost";
+		String documentUri = "http://www.kmi.open.ac.uk/apiUri/sessionLost";
+		URI sessionId = new uk.ac.kmi.server.store.URIImpl("http://www.kmi.open.ac.uk/session/sessionLost");
+		long currentTime = System.currentTimeMillis();
+		
+		
+		//addFormData(URI apiUri, String surveyId, URI userId, HashMap<String, Vector<String>> parameters)
+		
+		if (session != null ){
+			processId = (String) session.getAttribute("processId");
+	    	documentUri = (String) session.getAttribute("apiURL");
+	    	if( processId == null || processId.trim() == "" ){
+				 processId = "http://www.kmi.open.ac.uk/survey/sessionEmpty" +currentTime;
+			 }
+			 if( documentUri == null || documentUri.trim() == "" ){
+				 documentUri= "http://www.kmi.open.ac.uk/apiUri/sessionEmpty" + currentTime;
+			 }
+	    	sessionId = new URIImpl("http://www.kmi.open.ac.uk/session/"+ session.getId());
+		}
+	    
+		initializeStore();
+		
+		HashMap<String, String[]> parameters = new HashMap<String, String[]>();
+		
+		Enumeration paramNames = request.getParameterNames();
+	    while(paramNames.hasMoreElements()) {
+	      String paramName = (String)paramNames.nextElement();
+	      String[] paramValues = request.getParameterValues(paramName);
+	      
+	      if (paramValues.length > 0) {
+		      parameters.put(paramName, paramValues);
+	      } else {
+		      parameters.put(paramName, new String[]{request.getParameter(paramName)});
+	      }
+	    } // while
+	    
+	    URIImpl URI = new URIImpl(documentUri);
+	    storeInit.addFormData(URI, processId, sessionId, parameters);		
+
+	    //request.setAttribute("URI", URI.toString());
+	    request.getRequestDispatcher("/success.jsp").forward(request, response);
+	  }
+
+	
+	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void processRequestOld(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 	    PrintWriter out = response.getWriter();
@@ -102,12 +160,6 @@ public class StoreClassification extends HttpServlet {
 	    out.println("</TABLE>\n</BODY></HTML>");
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
-	}
 	
 	private void initializeStore() {
 		if(storeInit ==null)

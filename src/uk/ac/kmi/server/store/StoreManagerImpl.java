@@ -2,7 +2,10 @@ package uk.ac.kmi.server.store;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.TimeZone;
+import java.util.Vector;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -81,6 +84,82 @@ public class StoreManagerImpl implements StoreManager, QueryExecutor{
 		timeInstantUri = repoModel.createURI(STORE.Time_Instant);
 		inXSDDateTimeUri = repoModel.createURI(STORE.inXSDDateTime);
 		rdfRepositoryConnector.closeRepositoryModel(repoModel);
+	}
+
+	// creates triples for parameters
+	public void store(URI apiUri, String surveyId, URI userId, HashMap<String, String[]> parameters, Date time) {
+		try {
+			
+			RepositoryModel repoModel = rdfRepositoryConnector.openRepositoryModel();
+			// FIXME: only logging ONCE within ONE millisecond.
+			long currentTime = System.currentTimeMillis();
+			org.ontoware.rdf2go.model.node.URI surveyEntryInst = repoModel.createURI(STORE.NS + "surveyEntry" + currentTime);
+			org.ontoware.rdf2go.model.node.URI apiInst = repoModel.createURI(apiUri.toString());
+			org.ontoware.rdf2go.model.node.URI timeInstantInst = repoModel.createURI(STORE.TIME_NS + "instant" + currentTime);
+		
+			repoModel.addStatement(timeInstantInst, directTypeUri, timeInstantUri);
+			
+			org.ontoware.rdf2go.model.node.URI propertyUri = null;
+			org.ontoware.rdf2go.model.node.URI dataType = null;
+			org.ontoware.rdf2go.model.node.URI dateDataType = repoModel.createURI("http://www.w3.org/2001/XMLSchema-datatypes#date");
+			org.ontoware.rdf2go.model.node.URI tagPropertyUri = repoModel.createURI("http://iserve.kmi.open.ac.uk/ontology/lpw#hasTag");
+			
+			String param;
+			String[] values;
+			
+			
+			Iterator<String> params = parameters.keySet().iterator();
+			while(params.hasNext()) {
+				param = params.next();
+				values = parameters.get(param);
+				propertyUri = repoModel.createURI("http://kmi.open.ac.uk/web-api#" + param);
+				
+				// force datatypes for some params
+				//dataType = null;
+				//if (param.equals("updated")) dataType = dateDataType;
+					
+				for (int i = 0; i < values.length; i++) { 
+					System.out.println(surveyEntryInst.toString() + " " + propertyUri.toString() + " = " + values[i]);
+					if (values[i].trim() != "") {
+						//if (dataType == null) {
+							repoModel.addStatement(surveyEntryInst, propertyUri, values[i]);
+//						} else {
+//							repoModel.addStatement(surveyEntryInst, propertyUri, values[i], dataType);
+//						}
+					}
+				}
+				
+				//specific processing (add new triples)
+				if (param.equals("tags")) {
+					values = values[0].split(",");
+					for (int i = 0; i < values.length; i++) { 
+						if (values[i].trim() != "") repoModel.addStatement(surveyEntryInst, tagPropertyUri, repoModel.createURI("http://kmi.open.ac.uk/resource/tags/" + values[i].trim()));
+					}
+				}
+
+			}
+			
+
+
+			org.ontoware.rdf2go.model.node.URI surveyInst = repoModel.createURI(surveyId);
+			repoModel.addStatement(apiInst, inSurvey, surveyInst);
+			repoModel.addStatement(surveyEntryInst, directTypeUri, logEntryUri);
+			
+			
+			// FIXME 
+			org.ontoware.rdf2go.model.node.URI agnetInst = repoModel.createURI(userId.toString());
+			repoModel.addStatement(apiInst, hasUserID, agnetInst);
+			DatatypeFactory datatypeFactory;
+			datatypeFactory = DatatypeFactory.newInstance();
+			GregorianCalendar utcCalendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+			utcCalendar.setTime(time);
+			XMLGregorianCalendar xmlCalendar = datatypeFactory.newXMLGregorianCalendar(utcCalendar);
+			xmlCalendar = xmlCalendar.normalize();
+			repoModel.addStatement(timeInstantInst, inXSDDateTimeUri, repoModel.createDatatypeLiteral(xmlCalendar.toXMLFormat(), XSD._dateTime));
+			repoModel.addStatement(surveyEntryInst, hasDateTimeUri, timeInstantInst);
+
+			rdfRepositoryConnector.closeRepositoryModel(repoModel);
+		} catch (Exception ignored) {}
 	}
 
 	//logger.store(apiUri, surveyId, userId, hasCategoryProperty, "http://www.kmi.open.ac.uk/survey/classification/" + surveyProperyValue, new Date());

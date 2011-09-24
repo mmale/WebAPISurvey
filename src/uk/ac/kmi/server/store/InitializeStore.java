@@ -1,6 +1,8 @@
 package uk.ac.kmi.server.store;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Vector;
 
 import uk.ac.kmi.server.store.Configuration;
 import uk.ac.kmi.server.store.ConfigurationImpl;
@@ -83,5 +85,10 @@ public class InitializeStore {
 			logger.store(apiUri, surveyId, userId, hasCategoryProperty, "http://www.kmi.open.ac.uk/survey/classification/" + surveyProperyValue, new Date());
 		}
 		//return result;
+	}
+	
+	public void addFormData(URI apiUri, String surveyId, URI userId, HashMap<String, String[]> parameters) {
+		if (logger != null) 
+			logger.store(apiUri, surveyId, userId, parameters, new Date());
 	}
 }

@@ -33,11 +33,14 @@ public class PWAPIs {
 		String queryString = 
 		"PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
 		"PREFIX lpw:<http://iserve.kmi.open.ac.uk/ontology/lpw#>\n" +
+		"PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\n" +
 	
-		"SELECT ?api ?desc ?home WHERE {\n" +
+		"SELECT ?api ?desc ?home ?lastUp ?name WHERE {\n" +
 		"?api rdf:type lpw:API . \n" +
+		"?api rdfs:label ?name . \n" +
 		"?api lpw:apiHome ?home. \n" +
 		"?api lpw:summary ?desc. \n" +
+		"?api lpw:lastUpdate ?lastUp. \n" +
 		"}\n" +
 		"LIMIT 20 \n";
 		
@@ -45,6 +48,28 @@ public class PWAPIs {
 		QueryResultTable qrt = repoModel.sparqlSelect(queryString);
 		rdfRepositoryConnector.closeRepositoryModel(repoModel);
 		return qrt;
+	}
+	
+	public QueryRow getAPIsbyURI(String URI) throws RDFRepositoryException {
+		String queryString = 
+			"PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+			"PREFIX lpw:<http://iserve.kmi.open.ac.uk/ontology/lpw#>\n" +
+			"PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\n" +
+		
+			"SELECT ?desc ?home ?lastUp ?name WHERE {\n" +
+			"<"+URI+">" + " rdf:type lpw:API . \n" +
+			"<"+URI+">" + " rdfs:label ?name . \n" +
+			"<"+URI+">" + " lpw:apiHome ?home. \n" +
+			"<"+URI+">" + " lpw:summary ?desc. \n" +
+			"<"+URI+">" + " lpw:lastUpdate ?lastUp. \n" +
+			"}\n" +
+			"LIMIT 1 \n";
+			
+			RepositoryModel repoModel = rdfRepositoryConnector.openRepositoryModel();
+			QueryResultTable qrt = repoModel.sparqlSelect(queryString);
+			rdfRepositoryConnector.closeRepositoryModel(repoModel);
+			
+			return qrt.iterator().next();
 	}
 	
 	public QueryRow getAPIsbyIndex(int index) throws RDFRepositoryException {

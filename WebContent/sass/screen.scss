@@ -1,0 +1,133 @@
+@import "compass/css3";
+
+// This import applies a global reset to any page that imports this stylesheet.
+@import "blueprint/reset";
+
+// To configure blueprint, edit the partials/base.sass file.
+@import "partials/base";
+
+// Import all the default blueprint modules so that we can access their mixins.
+@import "blueprint";
+
+// Import the non-default scaffolding module.
+@import "blueprint/scaffolding";
+
+// To generate css equivalent to the blueprint css but with your
+// configuration applied, uncomment:
+@include blueprint;
+
+// If you are doing a lot of stylesheet concatenation, it is suggested
+// that you scope your blueprint styles, so that you can better control
+// what pages use blueprint when stylesheets are concatenated together.
+body {
+  @include blueprint-typography(true);
+  @include blueprint-utilities;
+  @include blueprint-debug;
+  @include blueprint-interaction;
+  // Remove the scaffolding when you're ready to start doing visual design.
+  // Or leave it in if you're happy with how blueprint looks out-of-the-box
+}
+
+form {
+  @include blueprint-form;
+  // You'll probably want to remove the scaffolding once you start styling your site.
+  @include blueprint-scaffolding; }
+
+body {
+	background-color:	lightgrey;
+	
+	article {
+		@include container;
+		//@include showgrid;
+
+		background-color:	white;
+		@include box-shadow(darkgrey 0px 0px 5px);
+		
+		margin:		1.5em	auto;
+		padding:	3em	0;
+		
+		h1, h2, h3 {
+			text-align:	center;
+			font-family:	Georgia, serif;
+		}
+			
+		h4 {
+			margin:	0;
+		}	
+		#progress {
+			color:	#666;
+			span {
+				color:	black;
+			}
+		}
+		
+		section {
+			@include column(22, true);
+			@include prepend(1);
+			
+			legend, label {
+				color:	#666;
+			}
+			
+			legend {
+				padding:	0 .5em;
+			}
+						
+			menu {
+				@include column(21, true);
+				text-align:	center;
+			}
+			
+			&:first-child button.back {
+				display:	none;
+			}
+			
+			fieldset {
+				@include column(21, true);
+				
+				&.half {
+					@include column(10);
+					label {
+						@include column(9, true);
+						margin-top:	8px;
+						
+						p {
+							margin:		0;
+							padding:	0;
+							font: {
+								weight:	normal;
+								family:	Georgia, serif;
+								style:	italic;
+							}
+						}
+						
+					}
+					input, textarea, select {
+						@include column(9, true);
+					}
+				}
+				
+				&.checkboxes label {
+					@include column(5);
+					margin-bottom:	.5em;
+				}
+			}
+			
+			
+			textarea {
+				height:	 3em;
+			}
+		} 
+		
+		section + section {
+			display:	none;
+		}
+		
+	}
+}
+
+//empty select item
+option[value=""] {
+	font-style:	italic;
+}
+
