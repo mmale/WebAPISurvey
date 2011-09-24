@@ -1736,27 +1736,33 @@ body article section menu {
   margin-right: 0;
   width: 830px;
   text-align: center;
+  margin-left: 21px;
 }
 /* line 147, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.11.5/frameworks/blueprint/stylesheets/blueprint/_grid.scss */
 * html body article section menu {
   overflow-x: hidden;
 }
-/* line 81, ../sass/screen.scss */
+/* line 82, ../sass/screen.scss */
 body article section:first-child button.back {
   display: none;
 }
-/* line 85, ../sass/screen.scss */
+/* line 86, ../sass/screen.scss */
 body article section fieldset {
   display: inline;
   float: left;
   margin-right: 0;
   width: 830px;
+  border: 1px solid #cc7000;
 }
 /* line 147, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.11.5/frameworks/blueprint/stylesheets/blueprint/_grid.scss */
 * html body article section fieldset {
   overflow-x: hidden;
 }
-/* line 88, ../sass/screen.scss */
+/* line 91, ../sass/screen.scss */
+body article section fieldset legend {
+  color: #cc7000;
+}
+/* line 97, ../sass/screen.scss */
 body article section fieldset.half {
   display: inline;
   float: left;
@@ -1767,8 +1773,8 @@ body article section fieldset.half {
 * html body article section fieldset.half {
   overflow-x: hidden;
 }
-/* line 90, ../sass/screen.scss */
-body article section fieldset.half label {
+/* line 99, ../sass/screen.scss */
+body article section fieldset.half > label, body article section fieldset.half > div > label.full {
   display: inline;
   float: left;
   margin-right: 0;
@@ -1776,18 +1782,18 @@ body article section fieldset.half label {
   margin-top: 8px;
 }
 /* line 147, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.11.5/frameworks/blueprint/stylesheets/blueprint/_grid.scss */
-* html body article section fieldset.half label {
+* html body article section fieldset.half > label, * html body article section fieldset.half > div > label.full {
   overflow-x: hidden;
 }
-/* line 94, ../sass/screen.scss */
-body article section fieldset.half label p {
+/* line 103, ../sass/screen.scss */
+body article section fieldset.half > label p, body article section fieldset.half > div > label.full p {
   margin: 0;
   padding: 0;
   font-weight: normal;
   font-family: Georgia, serif;
   font-style: italic;
 }
-/* line 105, ../sass/screen.scss */
+/* line 114, ../sass/screen.scss */
 body article section fieldset.half input, body article section fieldset.half textarea, body article section fieldset.half select {
   display: inline;
   float: left;
@@ -1798,7 +1804,41 @@ body article section fieldset.half input, body article section fieldset.half tex
 * html body article section fieldset.half input, * html body article section fieldset.half textarea, * html body article section fieldset.half select {
   overflow-x: hidden;
 }
-/* line 110, ../sass/screen.scss */
+/* line 118, ../sass/screen.scss */
+body article section fieldset.half div.radio {
+  display: inline;
+  float: left;
+  margin-right: 0;
+  width: 350px;
+}
+/* line 147, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.11.5/frameworks/blueprint/stylesheets/blueprint/_grid.scss */
+* html body article section fieldset.half div.radio {
+  overflow-x: hidden;
+}
+/* line 120, ../sass/screen.scss */
+body article section fieldset.half div.radio input {
+  width: auto;
+  float: none;
+  display: inline-block;
+  margin-right: .7em;
+}
+/* line 126, ../sass/screen.scss */
+body article section fieldset.half div.radio label {
+  margin-right: 1em;
+}
+/* line 132, ../sass/screen.scss */
+body article section fieldset.half.last {
+  display: inline;
+  float: left;
+  margin-right: 0;
+  width: 390px;
+  margin-left: 22px;
+}
+/* line 147, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.11.5/frameworks/blueprint/stylesheets/blueprint/_grid.scss */
+* html body article section fieldset.half.last {
+  overflow-x: hidden;
+}
+/* line 138, ../sass/screen.scss */
 body article section fieldset.checkboxes label {
   display: inline;
   float: left;
@@ -1810,16 +1850,27 @@ body article section fieldset.checkboxes label {
 * html body article section fieldset.checkboxes label {
   overflow-x: hidden;
 }
-/* line 117, ../sass/screen.scss */
+/* line 146, ../sass/screen.scss */
 body article section textarea {
   height: 3em;
 }
-/* line 122, ../sass/screen.scss */
+/* line 151, ../sass/screen.scss */
 body article section + section {
   display: none;
 }
 
-/* line 130, ../sass/screen.scss */
+/* line 159, ../sass/screen.scss */
 option[value=""] {
   font-style: italic;
+}
+
+/* line 163, ../sass/screen.scss */
+input[readonly=""], textarea[readonly=""] {
+  border: none !important;
+}
+
+/* line 167, ../sass/screen.scss */
+#tags {
+  margin-left: 0.7em;
+  width: 70%;
 }

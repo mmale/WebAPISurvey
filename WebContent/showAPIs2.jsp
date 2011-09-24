@@ -66,7 +66,7 @@
 					<textarea id="desc" name="desc" rows="3" cols="20" readonly><%= request.getAttribute("api.desc")%></textarea>
 				</fieldset>
 				
-				<fieldset class="half">
+				<fieldset class="half last">
 					<legend>Service Details</legend>
 					
 					<label for="updated">Last updated</label>
@@ -93,7 +93,7 @@
 					<legend>Tags</legend>
 					
 					<label for="tags">Comma separated tags</label>
-					<textarea id="tags" name="tags" rows="3" cols="20"></textarea>
+					<input type="text" id="tags" name="tags">
 				</fieldset>
 				
 				<fieldset class="half" id="auth-fieldset">
@@ -114,7 +114,7 @@
 					</select>
 					
 					<div id="w-other-auth" class="wrapper" style="display:none">
-						<label for="other-auth">Other</label>
+						<label for="other-auth" class="full">Other</label>
 						<input type="text" id="other-auth" name="other-auth">
 						<script>
 							$(function(){
@@ -148,7 +148,7 @@
 					
 				</fieldset>
 				
-				<fieldset class="half">
+				<fieldset class="half last">
 					<legend>Web API type</legend>
 					
 					<label for="webapi-type">Web API type</label>
@@ -160,7 +160,7 @@
 					</select>
 					
 					<div id="w-uri-struct" style="display:none">
-						<label for="uri-struct">Does the URI reflect the hierarchical structure of the resources?</label>
+						<label for="uri-struct" class="full">Does the URI reflect the hierarchical structure of the resources?</label>
 						<select id="uri-struct" name="uri-struct">
 							<option selected value="">please select...</option>
 							<option value="yes">yes</option>
@@ -180,20 +180,24 @@
 					</div>
 					
 					<label for="http-verb">HTTP method specified</label>
-					<select id="http-verb" name="http-verb">
+					<div class="radio">
+						<label><input type="radio" name="http-verb" value="yes">yes</label>
+						<label><input type="radio" name="http-verb" value="no">no</label>
+					</div>
+					<!--  select id="http-verb" name="http-verb">
 						<option selected value="">please select...</option>
 						<option value="no">no</option>
 						<option value="yes">yes</option>
-					</select>
+					</select-->
 					
 					<label for="noop">Number of operations</label>
 					<select id="noop" name="noop">
 						<option selected value="">please select...</option>
 						<option value="1">1</option>
 						<option value="2-10">2-10</option>
-						<option value="11-50">11-50</option>
-						<option value="51-100">51-100</option>
-						<option value="101-200">101-200</option>
+						<option value="11-50">11-50</option>
+						<option value="51-100">51-100</option>
+						<option value="101-200">101-200</option>
 						<option value="200+">200+</option>
 					</select>	
 				</fieldset>
@@ -254,7 +258,7 @@
 				</fieldset>
 				
 				
-				<fieldset class="half">
+				<fieldset class="half last">
 					<legend>Parameter options</legend>
 					
 					<h4>Does the API use:</h4>
@@ -324,7 +328,7 @@
 					</select>
 					
 					<div id="w-out-format" class="wrapper" style="display:none">
-						<label for="out-format-other">Other</label>
+						<label for="out-format-other" class="full">Other</label>
 						<input type="text" id="out-format-other" name="out-format-other">
 						<script>
 							$(function(){
@@ -358,7 +362,7 @@
 
 				</fieldset>
 				
-				<fieldset class="half">
+				<fieldset class="half last">
 					<legend>Error handling</legend>
 					
 					<label for="out-err-doc">Does the API document errors?</label>
@@ -411,7 +415,7 @@
 					
 				</fieldset>
 				
-				<fieldset class="half">
+				<fieldset class="half last">
 					<legend>URI details</legend>
 					
 					<label for="desc-endpoint">Does the description include an invocation URI (endpoint)?</label>
