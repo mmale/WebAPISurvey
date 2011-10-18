@@ -52,28 +52,81 @@
 		
 		<form method="post" action="StoreClassification">
 			<input type="hidden" name="debug" value="<%= request.getParameter("debug") %>">
+			<input type="hidden" name="apiId" value="<%= request.getParameter("URI") %>">
+			
+			<section id="section0">
+				<!--h2>Login</h2-->
+				
+				
+				<fieldset class="xhalf">
+					<legend>Welcome!</legend>
+					
+					<label for="user">Please provide your email address</label>
+					<input type="text" id="user" name="user">
+					<p>Your email will not be shared with anyone, it is used only for user-tracking purposes</p>
+					
+				</fieldset>
+				
+				<menu>
+					<button class="next">Next »</button>
+				</menu>
+			</section>
 			
 			<section id="section1">
-				<h2>Characteristics collectable from ProgrammableWeb’s API</h2>
+				<!--h2>Characteristics collectable from ProgrammableWeb’s API</h2-->
 				
 				<fieldset class="half">
 					<legend>Service</legend>
 					
-					<label for="name">Name</label>
-					<input id="name" name="name" type="text" readonly value="<%= request.getAttribute("api.name")%>">
+					<label for="api-name">Name of the Web API</label>
+					<input id="api-name" name="api-name" type="text" readonly value="<%= request.getAttribute("api.name")%>">
 					
-					<label for="desc">Summary</label>
-					<textarea id="desc" name="desc" rows="3" cols="20" readonly><%= request.getAttribute("api.desc")%></textarea>
+					<label for="api-lastUpdated">Date the documentation was last updated</label>
+					<input id="api-lastUpdated" name="api-lastUpdated" type="date" readonly value="<%= request.getAttribute("api.lastUpdated")%>">
+					
+					<label for="api-desc">Web API Description</label>
+					<textarea id="api-desc" name="api-desc" rows="3" cols="20" readonly><%= request.getAttribute("api.desc")%></textarea>
+				
 				</fieldset>
 				
 				<fieldset class="half last">
 					<legend>Service Details</legend>
 					
-					<label for="updated">Last updated</label>
-					<input id="updated" name="updated" type="date" readonly value="<%= request.getAttribute("api.lastUpdated")%>">
+					<label for="api-documentationUrl">Documentation URL</label>
+					<div>
+						<a href="<%= request.getAttribute("api.home")%>" target="_new"><%= request.getAttribute("api.home")%></a>
+					</div>
 					
-					<label for="doc">Documentation URL</label>
-					<input id="doc" name="doc" type="text" readonly value="<%= request.getAttribute("api.home")%>">
+					<!-- input id="api-documentationUrl" name="api-documentationUrl" type="text" readonly value=<%= request.getAttribute("api.home")%>">  -->
+					
+					<label for="documentationUrl-isCorrect">Does the URL point to the API documentation?</label>
+					<div class="radio">
+						<label><input type="radio" name="documentationUrl-isCorrect" value="yes">yes</label>
+						<label><input type="radio" name="documentationUrl-isCorrect" value="no">no</label>
+					</div>
+					
+					<label for="survey-canBeCompleted">Can the survey be completed for this API?</label>
+					<select id="survey-canBeCompleted" name="survey-canBeCompleted">
+						<option selected value="">please select...</option> 
+						<option value="Yes">Yes</option>
+						<option value="No">No</option>
+					</select>
+					
+					<div id="w-noSurveyComplete" class="wrapper" style="display:none">
+						<label for="noSurveyComplete" class="full">Why not?</label>
+						<input type="text" id="noSurveyComplete" name="noSurveyComplete">
+						<script>
+							$(function(){
+								$('#survey-canBeCompleted').bind('change', function() {
+									if ($(this).val() == "No") {
+										$('#w-noSurveyComplete').slideDown();
+									} else {
+										$('#w-noSurveyComplete').slideUp();
+									}
+								});
+							});
+						</script>
+					</div>	
 					
 					<!-- 
 					<label for="mashups">Number of Mashups</label>
@@ -84,9 +137,10 @@
 				
 				<fieldset class="checkboxes">
 					<legend>Category</legend>
+					<p>Select all categories that can be used to describe the type of API</p>
 					
 					<%= request.getAttribute("classes.all")%>
-					
+				
 				</fieldset>
 				
 				<fieldset class="xhalf">
@@ -94,12 +148,15 @@
 					
 					<label for="tags">Comma separated tags</label>
 					<input type="text" id="tags" name="tags">
+					<p>Please use ',' to separate the tags</p>
 				</fieldset>
 				
 				<fieldset class="half" id="auth-fieldset">
 					<legend>Authentication</legend>
 					
-					<label for="auth">Authentication mechanism</label>
+					<label for="auth-example">Authentication mechanism
+						<p>Provide link to explanation</p>		
+					</label>
 					<select id="auth" name="auth">
 						<option selected value="">please select...</option> 
 						<option value="none">No Authentication</option>
@@ -127,12 +184,10 @@
 								});
 							});
 						</script>
-					</div>
+					</div>		
 					
-					
-					
-					<label for="auth-medium">Method of transmitting authentication credentials</label>
-					<select id="auth-medium" name="auth-medium">
+					<label for="auth-transMedium">Where are the authentication credentials sent?</label>
+					<select id="auth-transMedium" name="auth-transMedium">
 						<option selected value="">please select...</option>
 						<option value="URI">in the URL</option>
 						<option value="HTTP Header">in a HTTP Header</option>
@@ -140,10 +195,10 @@
 						<option value="unclear">unclear</option>
 					</select>
 
-					<label for="auth-desc">Authentication example
+					<label for="auth-example">Authentication example
 						<p>If the authentication method is unclear please paste an example below:</p>		
 					</label>
-					<textarea id="auth-desc" name="auth-desc" rows="3" cols="20" ></textarea>
+					<textarea id="auth-example" name="auth-example" rows="3" cols="20" ></textarea>
 					
 					
 				</fieldset>
@@ -151,7 +206,9 @@
 				<fieldset class="half last">
 					<legend>Web API type</legend>
 					
-					<label for="webapi-type">Web API type</label>
+					<label for="webapi-type">Web API type
+					<p>Provide link to explanation</p>		
+					</label>
 					<select id="webapi-type" name="webapi-type">
 						<option selected value="">please select...</option>
 						<option value="RPC">RPC</option>
@@ -160,7 +217,9 @@
 					</select>
 					
 					<div id="w-uri-struct" style="display:none">
-						<label for="uri-struct" class="full">Does the URI reflect the hierarchical structure of the resources?</label>
+						<label for="uri-struct" class="full">Does the URI reflect the hierarchical structure of the resources?
+						<p>For exmaple, http://exmaple.api.com/wintersemester2011/courses/computerScience/introduction</p>		
+						</label>
 						<select id="uri-struct" name="uri-struct">
 							<option selected value="">please select...</option>
 							<option value="yes">yes</option>
@@ -179,10 +238,12 @@
 						</script>
 					</div>
 					
-					<label for="http-verb">HTTP method specified</label>
+					<label for="isHttpMethodDefined">Is the HTTP method specified?
+					<p>For exmaple, this operation is called via GET or this resource can be accessed via GET and POST</p>		
+					</label>
 					<div class="radio">
-						<label><input type="radio" name="http-verb" value="yes">yes</label>
-						<label><input type="radio" name="http-verb" value="no">no</label>
+						<label><input type="radio" name="isHttpMethodDefined" value="yes">yes</label>
+						<label><input type="radio" name="isHttpMethodDefined" value="no">no</label>
 					</div>
 					<!--  select id="http-verb" name="http-verb">
 						<option selected value="">please select...</option>
@@ -190,8 +251,8 @@
 						<option value="yes">yes</option>
 					</select-->
 					
-					<label for="noop">Number of operations</label>
-					<select id="noop" name="noop">
+					<label for="numberOfOperations">Number of operations</label>
+					<select id="numberOfOperations" name="numberOfOperations">
 						<option selected value="">please select...</option>
 						<option value="1">1</option>
 						<option value="2-10">2-10</option>
@@ -215,8 +276,8 @@
 				<fieldset class="half">
 					<legend>Input details</legend>
 					
-					<label for="input-method">Method of transmitting input parameters</label>
-					<select id="input-method" name="input-method">
+					<label for="input-isGroundedIn">Way of transmitting input parameters</label>
+					<select id="input-isGroundedIn" name="input-isGroundedIn">
 						<option selected value="">please select...</option>
 						<option value="URL">in the URL</option>
 						<option value="HTTP Body">in the HTTP Body</option>
@@ -224,36 +285,59 @@
 						<option value="mixed">mixed</option>
 					</select>
 					
-					<label for="input-object">Input is a complex object
-						<p>For example: XML, JSON, etc.</p>
+					<label for="input-isObject">Is the input a complex object?
+						<p>For example, XML, JSON, etc.</p>
 					</label>
-					<select id="input-object" name="input-object">
+					<div class="radio">
+						<label><input type="radio" name="input-isObject" value="yes">yes</label>
+						<label><input type="radio" name="input-isObject" value="no">no</label>
+					</div>
+					<!-- select id="input-object" name="input-object">
 						<option selected value="">please select...</option>
 						<option value="no">no</option>
 						<option value="yes">yes</option>
-					</select>
+					</select-->
 					
-					<label for="input-datatype">Is the data-type of the parameters stated</label>
-					<select id="input-datatype" name="input-datatype">
+					<label for="input-hasDatatype">Is the data-type of the parameters stated?
+					<p>For example, the parameter 'name' is a string and the parameter 'age' is an integer</p>
+					</label>
+					<div class="radio">
+						<label><input type="radio" name="input-hasDatatype" value="yes">yes</label>
+						<label><input type="radio" name="input-hasDatatype" value="no">no</label>
+					</div>
+					<!-- select id="input-datatype" name="input-datatype">
 						<option selected value="">please select...</option>
 						<option value="no">no</option>
 						<option value="yes">yes</option>
-					</select>
+					</select-->
 					
 					
-					<label for="input-links">Does the API description give links between outputs and inputs of different operations?</label>
-					<select id="input-links" name="input-links">
+					<label for="input-links">Does the API description give links between the outputs and inputs of the different operations?
+					<p>For example, the output of operation 'getUserName' can be used as input to the operation 'getPhoneNumber'</p>
+					</label>
+					<div class="radio">
+						<label><input type="radio" name="input-links" value="yes">yes</label>
+						<label><input type="radio" name="input-links" value="no">no</label>
+					</div>
+					<!--select id="input-links" name="input-links">
 						<option selected value="">please select...</option>
 						<option value="no">no</option>
 						<option value="yes">yes</option>
-					</select>
+					</select-->
 					
-					<label for="input-session">Is there any session token passed as input?</label>
-					<select id="input-session" name="input-session">
+					<label for="input-hasSessionInfo">Does the invocation require any information related to the state of the client?
+					<p>For example, session id, page number, request id - http://example.com/ad8b-0800200c9a66/news/, where 0800200c9a66 is the session id</p>
+					</label>
+					
+					<div class="radio">
+						<label><input type="radio" name="input-hasSessionInfo" value="yes">yes</label>
+						<label><input type="radio" name="input-hasSessionInfo" value="no">no</label>
+					</div>
+					<!--select id="input-session" name="input-session">
 						<option selected value="">please select...</option>
 						<option value="no">no</option>
 						<option value="yes">yes</option>
-					</select>
+					</select-->
 					
 				</fieldset>
 				
@@ -263,42 +347,78 @@
 					
 					<h4>Does the API use:</h4>
 					
-					<label for="param-optional">Optional parameters</label>
-					<select id="param-optional" name="param-optional">
-						<option selected value="">please select...</option>
-						<option value="no">no</option>
-						<option value="yes">yes</option>
-					</select>
-										
-					<label for="param-default">Default values</label>
-					<select id="param-default" name="param-default">
-						<option selected value="">please select...</option>
-						<option value="no">no</option>
-						<option value="yes">yes</option>
-					</select>
-										
-					<label for="param-coded">Coded values
-						<p>For example:....</p>
+					<label for="input-hasOptionalParams">Optional parameters
+					<p>No input value needs to be provided</p>
 					</label>
-					<select id="param-coded" name="param-coded">
+					<div class="radio">
+						<label><input type="radio" name="input-hasOptionalParams" value="yes">yes</label>
+						<label><input type="radio" name="input-hasOptionalParams" value="no">no</label>
+					</div>
+					
+					<label for="input-hasRequiredParams">Required parameters
+					<p>An input value must be provided</p>
+					</label>
+					<div class="radio">
+						<label><input type="radio" name="input-hasRequiredParams" value="yes">yes</label>
+						<label><input type="radio" name="input-hasRequiredParams" value="no">no</label>
+					</div>
+					<!-- select id="param-optional" name="param-optional">
 						<option selected value="">please select...</option>
 						<option value="no">no</option>
 						<option value="yes">yes</option>
-					</select>
+					</select-->
 										
-					<label for="param-alt">Alternative values</label>
-					<select id="param-alt" name="param-alt">
+					<label for="input-hasDefaultParams">Default values
+					<p>In case no input value is provided, there is a default value used</p>
+					</label>
+					<div class="radio">
+						<label><input type="radio" name="input-hasDefaultParams" value="yes">yes</label>
+						<label><input type="radio" name="input-hasDefaultParams" value="no">no</label>
+					</div>
+					<!-- select id="param-default" name="param-default">
 						<option selected value="">please select...</option>
 						<option value="no">no</option>
 						<option value="yes">yes</option>
-					</select>									
+					</select-->
+										
+					<label for="input-hasCodedParams">Coded values
+						<p>For example, 'en' instead of English</p>
+					</label>
+					<div class="radio">
+						<label><input type="radio" name="input-hasCodedParams" value="yes">yes</label>
+						<label><input type="radio" name="input-hasCodedParams" value="no">no</label>
+					</div>
+					<!--select id="param-coded" name="param-coded">
+						<option selected value="">please select...</option>
+						<option value="no">no</option>
+						<option value="yes">yes</option>
+					</select-->
+										
+					<label for="input-hasAltParams">Alternative values
+						<p>For example, the input can have values 1, 2 or 3</p>
+					</label>
+					<div class="radio">
+						<label><input type="radio" name="input-hasAltParams" value="yes">yes</label>
+						<label><input type="radio" name="input-hasAltParams" value="no">no</label>
+					</div>
+					<!-- select id="param-alt" name="param-alt">
+						<option selected value="">please select...</option>
+						<option value="no">no</option>
+						<option value="yes">yes</option>
+					</select-->									
 
-					<label for="param-bool">Boolean values</label>
-					<select id="param-bool" name="param-bool">
+					<label for="input-hasBoolParams">Boolean values
+					<p>Input with values true/false, 0/1, yes/no</p>
+					</label>
+					<div class="radio">
+						<label><input type="radio" name="input-hasBoolParams" value="yes">yes</label>
+						<label><input type="radio" name="input-hasBoolParams" value="no">no</label>
+					</div>
+					<!--select id="param-bool" name="param-bool">
 						<option selected value="">please select...</option>
 						<option value="no">no</option>
 						<option value="yes">yes</option>
-					</select>									
+					</select-->									
 				</fieldset>
 				
 				<menu>
@@ -316,8 +436,8 @@
 				<fieldset class="half">
 					<legend>Output Format</legend>
 					
-					<label for="out-format">What is the format of the output?</label>
-					<select id="out-format" name="out-format">
+					<label for="output-format">What is the format of the output?</label>
+					<select id="output-format" name="output-format">
 						<option selected value="">please select...</option>
 						<option value="XML">XML</option>
 						<option value="JSON">JSON</option>
@@ -327,16 +447,16 @@
 						<option value="Other">Other</option>
 					</select>
 					
-					<div id="w-out-format" class="wrapper" style="display:none">
-						<label for="out-format-other" class="full">Other</label>
-						<input type="text" id="out-format-other" name="out-format-other">
+					<div id="w-output-format" class="wrapper" style="display:none">
+						<label for="output-format-other" class="full">Other</label>
+						<input type="text" id="output-format-other" name="output-format-other">
 						<script>
 							$(function(){
-								$('#out-format').bind('change', function() {
+								$('#output-format').bind('change', function() {
 									if ($(this).val() == "Other") {
-										$('#w-out-format').slideDown();
+										$('#w-output-format').slideDown();
 									} else {
-										$('#w-out-format').slideUp();
+										$('#w-output-format').slideUp();
 									}
 								});
 							});
@@ -344,8 +464,8 @@
 					</div>
 					
 					
-					<label for="out-format-spec">How is the output format determined?</label>
-					<select id="out-format-spec" name="out-format-spec">
+					<label for="output-format-definition">How is the output format determined?</label>
+					<select id="output-format-definition" name="output-format-definition">
 						<option selected value="">please select...</option>
 						<option value="parameter">as a parameter</option>
 						<option value="URL">as part of the URL</option>
@@ -353,31 +473,45 @@
 						<option value="conneg">via content negotiation</option>
 					</select>
 
-					<label for="out-format-schema">Does the output have a schema definition?</label>
-					<select id="out-format-schema" name="out-format-schema">
+					<label for="output-hasSchema">Does the output have a schema definition?</label>
+					<div class="radio">
+						<label><input type="radio" name="output-hasSchema" value="yes">yes</label>
+						<label><input type="radio" name="output-hasSchema" value="no">no</label>
+					</div>
+					<!-- select id="out-format-schema" name="out-format-schema">
 						<option selected value="">please select...</option>
 						<option value="yes">yes</option>
 						<option value="no">no</option>
-					</select>
+					</select-->
 
 				</fieldset>
 				
 				<fieldset class="half last">
 					<legend>Error handling</legend>
 					
-					<label for="out-err-doc">Does the API document errors?</label>
-					<select id="out-err-doc" name="out-err-doc">
+					<label for="err-has">Does the API contain description of errors?</label>
+					<div class="radio">
+						<label><input type="radio" name="err-has" value="yes">yes</label>
+						<label><input type="radio" name="err-has" value="no">no</label>
+					</div>
+					<!-- select id="out-err-doc" name="out-err-doc">
 						<option selected value="">please select...</option>
 						<option value="yes">yes</option>
 						<option value="no">no</option>
-					</select>
+					</select-->
 					
-					<label for="out-err-http">Does the API use standard HTTP error codes?</label>
-					<select id="out-err-http" name="out-err-http">
+					<label for="err-useHttpErrs">Does the API use standard HTTP error codes?
+					<p>For exmaple, 403 Forbidden or 404 Not Found</p>
+					</label>
+					<div class="radio">
+						<label><input type="radio" name="err-useHttpErrs" value="yes">yes</label>
+						<label><input type="radio" name="err-useHttpErrs" value="no">no</label>
+					</div>
+					<!-- select id="out-err-http" name="out-err-http">
 						<option selected value="">please select...</option>
 						<option value="yes">yes</option>
 						<option value="no">no (custom errors)</option>
-					</select>
+					</select-->
 					
 				</fieldset>
 				
@@ -398,56 +532,78 @@
 					
 					<h4>Does the description provide:</h4>
 					
-					<label for="desc-req">Example requests?</label>
-					<select id="desc-req" name="desc-req">
+					<label for="example-req">Example requests?</label>
+					<div class="radio">
+						<label><input type="radio" name="example-req" value="yes">yes</label>
+						<label><input type="radio" name="example-req" value="no">no</label>
+					</div>
+					<!-- select id="desc-req" name="desc-req">
 						<option selected value="">please select...</option>
 						<option value="yes">yes</option>
 						<option value="no">no</option>
-					</select>
+					</select-->
 					
-					<label for="desc-resp">Example responses?</label>
-					<select id="desc-resp" name="desc-resp">
+					<label for="example-resp">Example responses?</label>
+					<div class="radio">
+						<label><input type="radio" name="example-resp" value="yes">yes</label>
+						<label><input type="radio" name="example-resp" value="no">no</label>
+					</div>
+					<!-- select id="desc-resp" name="desc-resp">
 						<option selected value="">please select...</option>
 						<option value="yes">yes</option>
 						<option value="no">no</option>
-					</select>
+					</select-->
 					
+					<label for="desc-hasInvocUri">Does the description include an invocation URI (endpoint)?</label>
+					<div class="radio">
+						<label><input type="radio" name="desc-hasInvocUri" value="yes">yes</label>
+						<label><input type="radio" name="desc-hasInvocUri" value="no">no</label>
+					</div>
 					
 				</fieldset>
 				
 				<fieldset class="half last">
 					<legend>URI details</legend>
 					
-					<label for="desc-endpoint">Does the description include an invocation URI (endpoint)?</label>
-					<select id="desc-endpoint" name="desc-endpoint">
+					<label for="uri-hasTemplates">Is the URI composed through URI templates?
+					<p>For exmaple, http://ex.com/api/{token}/users/{id}.xml</p>
+					</label>
+					<div class="radio">
+						<label><input type="radio" name="uri-hasTemplates" value="yes">yes</label>
+						<label><input type="radio" name="uri-hasTemplates" value="no">no</label>
+					</div>
+					<!-- select id="desc-tpl" name="desc-tpl">
 						<option selected value="">please select...</option>
 						<option value="yes">yes</option>
 						<option value="no">no</option>
-					</select>
+					</select-->
 					
-					<label for="desc-tpl">Is the URI composed through URI templates?</label>
-					<select id="desc-tpl" name="desc-tpl">
+					<label for="uri-hasQueryParams">Does the URI use query parameters?
+					<p>For exmaple, http://ex.com/aip/getNews?date=2011-11-11, where the query parameter is 'date'</p>
+					</label>
+					<div class="radio">
+						<label><input type="radio" name="uri-hasQueryParams" value="yes">yes</label>
+						<label><input type="radio" name="uri-hasQueryParams" value="no">no</label>
+					</div>
+					<!--select id="desc-query" name="desc-query">
 						<option selected value="">please select...</option>
 						<option value="yes">yes</option>
 						<option value="no">no</option>
-					</select>
+					</select-->
 					
-					<label for="desc-query">Does the URI use query parameters?</label>
-					<select id="desc-query" name="desc-query">
+					<label for="uri-hasVersionInfo">Does the URI include version numbers?
+					<p>For exmaple, http://ex.com/aipv2/getNews or http://ex.com/api/version2/getNews</p>
+					</label>
+					<div class="radio">
+						<label><input type="radio" name="uri-hasVersionInfo" value="yes">yes</label>
+						<label><input type="radio" name="uri-hasVersionInfo" value="no">no</label>
+					</div>
+					<!--  select id="desc-version" name="desc-version">
 						<option selected value="">please select...</option>
 						<option value="yes">yes</option>
 						<option value="no">no</option>
-					</select>
-					
-					<label for="desc-version">Does the URI include version numbers?</label>
-					<select id="desc-version" name="desc-version">
-						<option selected value="">please select...</option>
-						<option value="yes">yes</option>
-						<option value="no">no</option>
-					</select>
-					
-					
-					
+					</select-->
+	
 				</fieldset>
 				
 				<!--  menu>
@@ -457,6 +613,7 @@
 				<h3>Please submit the survey by pressing the button below</h3>
 				
 				<menu>
+					<button class="back">« Back</button>
 					<button type="submit">Submit survey</button>
 				</menu>
 				

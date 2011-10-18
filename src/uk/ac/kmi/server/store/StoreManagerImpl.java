@@ -121,11 +121,10 @@ public class StoreManagerImpl implements StoreManager, QueryExecutor{
 				for (int i = 0; i < values.length; i++) { 
 					System.out.println(surveyEntryInst.toString() + " " + propertyUri.toString() + " = " + values[i]);
 					if (values[i].trim() != "") {
-						//if (dataType == null) {
+						//for ignoring debug parameter
+						if (values[i].trim() != "null") {
 							repoModel.addStatement(surveyEntryInst, propertyUri, values[i]);
-//						} else {
-//							repoModel.addStatement(surveyEntryInst, propertyUri, values[i], dataType);
-//						}
+						} 
 					}
 				}
 				
@@ -136,11 +135,8 @@ public class StoreManagerImpl implements StoreManager, QueryExecutor{
 						if (values[i].trim() != "") repoModel.addStatement(surveyEntryInst, tagPropertyUri, repoModel.createURI("http://kmi.open.ac.uk/resource/tags/" + values[i].trim()));
 					}
 				}
-
 			}
 			
-
-
 			org.ontoware.rdf2go.model.node.URI surveyInst = repoModel.createURI(surveyId);
 			repoModel.addStatement(apiInst, inSurvey, surveyInst);
 			repoModel.addStatement(surveyEntryInst, directTypeUri, logEntryUri);
