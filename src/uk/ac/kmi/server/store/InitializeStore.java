@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 
+import org.apache.commons.httpclient.HttpClient;
+
 import uk.ac.kmi.server.store.Configuration;
 import uk.ac.kmi.server.store.ConfigurationImpl;
 import uk.ac.kmi.server.store.STORE;
@@ -41,6 +43,9 @@ public class InitializeStore {
 		String baseDir = InitializeStore.class.getResource("/").getPath();
 		baseDir = baseDir.replaceAll("%20", " ");
 		String configPath = baseDir + "../config.properties";
+		
+		HttpClient httpclient = new HttpClient();
+        httpclient.getHostConfiguration().setProxy("wwwcache.open.ac.uk", 80);
 		
 		config = new ConfigurationImpl(configPath);
 		try {

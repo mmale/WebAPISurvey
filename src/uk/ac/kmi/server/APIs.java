@@ -39,7 +39,8 @@ public class APIs extends HttpServlet {
 		//For testing only!
 		//if (index == null) index = "2";
 		
-		String URI = request.getParameter("URI");		
+		String URI = request.getParameter("URI");	
+		String nextURI = "";
 		
 		
 		// initialize the result variable
@@ -49,6 +50,8 @@ public class APIs extends HttpServlet {
 		String apiHome = "No home URL!";
 		String apiName = "Untitled!";
 		String apiLastUp = "n/a";
+		
+		Integer countOfSurveyEntriesForLastAPI = 0;
 		
 		QueryResultTable classesResult = null;
 		
@@ -60,8 +63,35 @@ public class APIs extends HttpServlet {
 			if (index != null) {
 				i = Integer.parseInt(index);
 				apiResult = apis.getAPIsbyIndex(i);
+				
+				nextURI = apis.getAPIsbyIndex(i+1).getValue("api").toString();
+				
 			} else if (URI != null) {
 				apiResult = apis.getAPIsbyURI(URI);
+				
+				//get Next API
+				nextURI = apis.getNextAPIForSurvey(URI)[0];
+					
+			} else if (URI == null || URI == "") {
+				URI = apis.getLastSurveyAPI();
+				countOfSurveyEntriesForLastAPI = apis.getCountForLastSurveyAPI(URI);
+				
+				if( countOfSurveyEntriesForLastAPI > 3) {
+					
+					//get next API
+					URI = apis.getNextAPIForSurvey(URI)[0];
+					nextURI = apis.getNextAPIForSurvey(URI)[1];
+					//URI = apis.getNextAPIForSurvey(URI);
+					
+					if(URI.trim() == ""){
+						new Exception("No more APIs to analyse");
+					}
+				} else {
+					
+					nextURI = apis.getNextAPIForSurvey(URI)[0];
+				}
+				
+					apiResult = apis.getAPIsbyURI(URI);
 			}
 			
 		} catch (RDFRepositoryException e) {
@@ -79,6 +109,9 @@ public class APIs extends HttpServlet {
 			apiName = apiResult.getValue("name").toString();
 			apiLastUp = apiResult.getLiteralValue("lastUp").toString();
 		}
+		
+		
+		request.setAttribute("nextURI",nextURI );
 		
 		request.setAttribute("api.url",apiURL );
 		request.setAttribute("api.desc",apiDesc );

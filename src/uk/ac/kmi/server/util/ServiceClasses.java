@@ -26,6 +26,8 @@ public class ServiceClasses {
 			//rdfRepositoryConnector = new RDFRepositoryConnector(config.getRepositoryServerUri(), config.getPWRepositoryName());
 			rdfRepositoryConnector = new RDFRepositoryConnector(new uk.ac.kmi.server.store.URIImpl("http://localhost:8080/openrdf-sesame"), "ProgrammableWeb");
 			
+			//rdfRepositoryConnector = new RDFRepositoryConnector(new uk.ac.kmi.server.store.URIImpl("http://localhost:8080/openrdf-sesame"), "ProgWeb");
+			
 		} catch (RDFRepositoryException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
