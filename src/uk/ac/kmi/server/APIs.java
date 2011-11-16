@@ -168,7 +168,10 @@ public class APIs extends HttpServlet {
 		
 		request.setAttribute("classes.all",allClassesHTML );
 		
-		request.getRequestDispatcher("/showAPIs2.jsp").forward(request,response);
+		//For the general survey
+		//request.getRequestDispatcher("/showAPIs2.jsp").forward(request,response);
+		//Only for classification
+		request.getRequestDispatcher("/showAPIs3.jsp").forward(request,response);
 		
 	}
 
