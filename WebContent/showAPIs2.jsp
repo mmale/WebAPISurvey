@@ -29,6 +29,7 @@
 		// ?rm=%23section1%2C%23fieldsetQuery
 		// escape("#section1,#fieldsetQuery")
 		// example http://localhost:8080/WebContent/APIs?rm=%23section2%2C%23section3
+		//rm=%23section2%2C%23section3%2C%23section1%2C%23URI-details%2C%23examples%2C%23heading-descriptionDetails
 		// or disable auth which is a fieldset with id auth-fieldset
 		// ?rm=%23auth-fieldset
 		// http://localhost:8080/WebContent/APIs?rm=%23auth-fieldset
@@ -52,7 +53,7 @@
 		
 		<form method="post" action="StoreClassification">
 			<input type="hidden" name="debug" value="<%= request.getParameter("debug") %>">
-			<input type="hidden" name="apiId" value="<%= request.getParameter("URI") %>">
+			<input type="hidden" name="scope" value="<%= request.getParameter("scope") %>">
 			
 			<section id="section0">
 				<!--h2>Login</h2-->
@@ -64,16 +65,7 @@
 					<label for="user">Please provide your email address</label>
 					<input type="text" id="user" name="user">
 					<p>Your email will not be shared with anyone, it is used only for user-tracking purposes</p>
-					
 				</fieldset>
-				
-				<menu>
-					<button class="next">Next »</button>
-				</menu>
-			</section>
-			
-			<section id="section1">
-				<!--h2>Characteristics collectable from ProgrammableWeb’s API</h2-->
 				
 				<fieldset class="half">
 					<legend>Service</legend>
@@ -87,14 +79,21 @@
 					<label for="api-desc">Web API Description</label>
 					<textarea id="api-desc" name="api-desc" rows="3" cols="20" readonly><%= request.getAttribute("api.desc")%></textarea>
 				
+					<input type="hidden" name="apiId" value="<%= request.getAttribute("api.url") %>">
+					
 				</fieldset>
 				
 				<fieldset class="half last">
 					<legend>Service Details</legend>
 					
+					<p>If you have already completed the survey for this API 
+					<!-- http://localhost:8080/WebContent/APIs  http://sweetdemo.kmi.open.ac.uk/war/APIs-->
+					<a href="http://kmi-web17.open.ac.uk:8080/apis/APIs?URI=<%= request.getAttribute("nextURI")%>" target="_new_<%= request.getAttribute("nextURI")%>">
+					<b>click here</b></a> to get the description of the next one.</p>
+					
 					<label for="api-documentationUrl">Documentation URL</label>
 					<div>
-						<a href="<%= request.getAttribute("api.home")%>" target="_new"><%= request.getAttribute("api.home")%></a>
+						<a href="<%= request.getAttribute("api.home")%>" target="_new"><b><%= request.getAttribute("api.home")%></b></a>
 					</div>
 					
 					<!-- input id="api-documentationUrl" name="api-documentationUrl" type="text" readonly value=<%= request.getAttribute("api.home")%>">  -->
@@ -134,7 +133,6 @@
 					-->
 				</fieldset>
 				
-				
 				<fieldset class="checkboxes">
 					<legend>Category</legend>
 					<p>Select all categories that can be used to describe the type of API</p>
@@ -142,6 +140,13 @@
 					<%= request.getAttribute("classes.all")%>
 				
 				</fieldset>
+				
+				<menu>
+					<button class="next">Next »</button>
+				</menu>
+			</section>
+			
+			<section id="section1">
 				
 				<fieldset class="xhalf">
 					<legend>Tags</legend>
@@ -155,7 +160,8 @@
 					<legend>Authentication</legend>
 					
 					<label for="auth-example">Authentication mechanism
-						<p>Provide link to explanation</p>		
+						<p>More details on 
+						<a href="auth.html" target="_newAuth">authentication approaches</a></p>		
 					</label>
 					<select id="auth" name="auth">
 						<option selected value="">please select...</option> 
@@ -207,8 +213,11 @@
 					<legend>Web API type</legend>
 					
 					<label for="webapi-type">Web API type
-					<p>Provide link to explanation</p>		
-					</label>
+					<p><b>- RPC:</b> resource retrieval is operation or 'verb' based. For exmaple, HTTP GET http://example.com/api/getNews</p>		
+					<p><b>- REST:</b> resource retrieval is resource or 'nouns' based. For exmaple, HTTP GET http://example.com/api/News/2011-11-18</p>		
+					<p><b>- hybrid:</b> the used HTTP method contradicts operation semntaics (getNews via POST). For exmaple, HTTP GET http://example.com/api/getNews</p>		
+					<p>More details on 
+						<a href="apiTypes.html" target="_newTypes">Web API types</a></p></label>
 					<select id="webapi-type" name="webapi-type">
 						<option selected value="">please select...</option>
 						<option value="RPC">RPC</option>
@@ -437,30 +446,18 @@
 					<legend>Output Format</legend>
 					
 					<label for="output-format">What is the format of the output?</label>
-					<select id="output-format" name="output-format">
-						<option selected value="">please select...</option>
-						<option value="XML">XML</option>
-						<option value="JSON">JSON</option>
-						<option value="RDF">RDF</option>
-						<option value="CSV">CSV</option>
-						<option value="text">Text</option>
-						<option value="Other">Other</option>
-					</select>
 					
-					<div id="w-output-format" class="wrapper" style="display:none">
+					<div class="radio">
+						<label><input type="checkbox" id="output-format1" name="output-format" value="XML">XML</label>
+						<label><input type="checkbox" id="output-format2" name="output-format" value="JSON">JSON</label>
+						<label><input type="checkbox" id="output-format3" name="output-format" value="RDF">RDF</label>
+						<label><input type="checkbox" id="output-format4" name="output-format" value="CSV">CSV</label>
+						<label><input type="checkbox" id="output-format5" name="output-format" value="text">text</label>
+					</div>
+					
+					<div id="w-output-format" class="wrapper">
 						<label for="output-format-other" class="full">Other</label>
-						<input type="text" id="output-format-other" name="output-format-other">
-						<script>
-							$(function(){
-								$('#output-format').bind('change', function() {
-									if ($(this).val() == "Other") {
-										$('#w-output-format').slideDown();
-									} else {
-										$('#w-output-format').slideUp();
-									}
-								});
-							});
-						</script>
+						<input type="text" id="output-format6" name="output-format-other">
 					</div>
 					
 					
@@ -524,10 +521,10 @@
 			
 			
 			<section id="section4">
-				<h2>Description details</h2>
+				<h2 id="heading-descriptionDetails">Description details</h2>
 				
 				
-				<fieldset class="half">
+				<fieldset class="half" id="examples">
 					<legend>Examples</legend>
 					
 					<h4>Does the description provide:</h4>
@@ -562,7 +559,7 @@
 					
 				</fieldset>
 				
-				<fieldset class="half last">
+				<fieldset class="half last" id="URI-details">
 					<legend>URI details</legend>
 					
 					<label for="uri-hasTemplates">Is the URI composed through URI templates?
@@ -592,7 +589,7 @@
 					</select-->
 					
 					<label for="uri-hasVersionInfo">Does the URI include version numbers?
-					<p>For exmaple, http://ex.com/aipv2/getNews or http://ex.com/api/version2/getNews</p>
+					<p>For exmaple, http://ex.com/api/version2/getNews</p>
 					</label>
 					<div class="radio">
 						<label><input type="radio" name="uri-hasVersionInfo" value="yes">yes</label>
@@ -610,7 +607,7 @@
 					<button class="back">« Back</button>
 					<button class="next">Next »</button>
 				</menu -->
-				<h3>Please submit the survey by pressing the button below</h3>
+				<h3>Thank you for participating! Please submit the survey by pressing the button below.</h3>
 				
 				<menu>
 					<button class="back">« Back</button>

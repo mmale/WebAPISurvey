@@ -1,6 +1,7 @@
 package uk.ac.kmi.server;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 import javax.servlet.ServletException;
@@ -79,10 +80,13 @@ public class StoreClassification extends HttpServlet {
 	    } // while
 	    
 	    URIImpl URI = new URIImpl(documentUri);
-	    storeInit.addFormData(URI, processId, sessionId, parameters);		
-
+	    storeInit.addFormData(URI, processId, sessionId, parameters);
+	    
 	    //request.setAttribute("URI", URI.toString());
 	    request.getRequestDispatcher("/success.jsp").forward(request, response);
+	    
+	   //Only for classify
+	   // request.getRequestDispatcher("redirect.jsp").forward(request, response);
 	  }
 
 	

@@ -143,10 +143,7 @@
 				</fieldset>
 			
 				<menu>
-					<button type="button" onClick="location.href='http://kmi-web17.open.ac.uk:8080/apis/APIs?scope=classify&URI=<%= request.getAttribute("nextURI")%>'">
-					Next API »
-					</button>
-					<button type="submit">Submit survey</button>
+					<button type="submit">Next API</button>
 				</menu>
 				
 			</section>
