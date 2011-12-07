@@ -163,34 +163,30 @@
 						<p>More details on 
 						<a href="auth.html" target="_newAuth">authentication approaches</a></p>		
 					</label>
-					<select id="auth" name="auth">
-						<option selected value="">please select...</option> 
-						<option value="none">No Authentication</option>
-						<option value="API Key">API Key</option>
-						<option value="Username and Password">Username and Password</option>
-						<option value="OAuth">OAuth</option>
-						<option value="HTTP Basic">HTTP Basic</option>
-						<option value="HTTP Digest">HTTP Digest</option>
-						<option value="Web API Operation">Web API Operation</option>
-						<option value="Session Based">Session Based</option>
-						<option value="Other">Other</option>
-					</select>
 					
-					<div id="w-other-auth" class="wrapper" style="display:none">
-						<label for="other-auth" class="full">Other</label>
-						<input type="text" id="other-auth" name="other-auth">
-						<script>
-							$(function(){
-								$('#auth').bind('change', function() {
-									if ($(this).val() == "Other") {
-										$('#w-other-auth').slideDown();
-									} else {
-										$('#w-other-auth').slideUp();
-									}
-								});
-							});
-						</script>
-					</div>		
+					<div class="radio">
+						<label><input type="checkbox" id="auth1" name="auth" value="none">No Authentication</label>
+						<label><input type="checkbox" id="auth2" name="auth" value="API Key">API Key</label>
+						<label><input type="checkbox" id="auth3" name="auth" value="Username and Password">Username and Password</label>
+						<label><input type="checkbox" id="auth4" name="auth" value="OAuth">OAuth</label>
+						<label><input type="checkbox" id="auth5" name="auth" value="HTTP Basic">HTTP Basic</label>
+						<label><input type="checkbox" id="auth6" name="auth" value="HTTP Digest">HTTP Digest</label>
+						<label><input type="checkbox" id="auth7" name="auth" value="Web API Operation">Web API Operation</label>
+						<label><input type="checkbox" id="auth8" name="auth" value="Session Based">Session Based</label>
+					</div>
+					
+					<div id="w-auth" class="wrapper">
+						<label for="auth-other" class="full">Other</label>
+						<input type="text" id="other-auth" name="auth-other">
+					</div>
+					
+					<label for="authreq">Is authentication required for:</label>
+					<div class="radio">
+						<label><input type="radio" id="authreq1" name="authreq" value="all">All operations</label>
+						<label><input type="radio" id="authreq2" name="authreq" value="data manipulation">Operations for data manipulation (create, edit and delete)</label>
+						<label><input type="radio" id="authreq3" name="authreq" value="some">Some operations</label>
+						<label><input type="radio" id="authreq4" name="authreq" value="none">None of the operations</label>
+					</div>
 					
 					<label for="auth-transMedium">Where are the authentication credentials sent?</label>
 					<select id="auth-transMedium" name="auth-transMedium">

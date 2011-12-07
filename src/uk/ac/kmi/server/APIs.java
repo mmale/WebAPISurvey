@@ -76,7 +76,8 @@ public class APIs extends HttpServlet {
 				URI = apis.getLastSurveyAPI();
 				countOfSurveyEntriesForLastAPI = apis.getCountForLastSurveyAPI(URI);
 				
-				if( countOfSurveyEntriesForLastAPI > 3) {
+				//only two classifications per API
+				if( countOfSurveyEntriesForLastAPI > 1) {
 					
 					//get next API
 					URI = apis.getNextAPIForSurvey(URI)[0];
