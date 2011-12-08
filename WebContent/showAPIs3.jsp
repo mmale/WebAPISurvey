@@ -54,6 +54,7 @@
 		<form method="post" action="StoreClassification">
 			<input type="hidden" name="debug" value="<%= request.getParameter("debug") %>">
 			<input type="hidden" name="scope" value="<%= request.getParameter("scope") %>">
+			<input type="hidden" name="nextURI" value="<%= request.getAttribute("nextURI")%>">
 			
 			<section id="section0">
 				<!--h2>Login</h2-->
@@ -88,7 +89,7 @@
 					
 					<p>If you have already completed the survey for this API 
 					<!-- http://localhost:8080/WebContent/APIs  http://sweetdemo.kmi.open.ac.uk/war/APIs-->
-					<a href="http://kmi-web17.open.ac.uk:8080/apis/APIs?scope=classify&URI=<%= request.getAttribute("nextURI")%>" target="_new_<%= request.getAttribute("nextURI")%>">
+					<a href="http://apisurvey.kmi.open.ac.uk/APIs?scope=classify&URI=<%= request.getAttribute("nextURI")%>" target="_new_<%= request.getAttribute("nextURI")%>">
 					<b>click here</b></a> to get the description of the next one.</p>
 					
 					<label for="api-documentationUrl">Documentation URL</label>
@@ -140,6 +141,14 @@
 					
 					<%= request.getAttribute("classes.all")%>
 				
+				</fieldset>
+				
+				<fieldset class="xhalf">
+					<legend>Tags</legend>
+					
+					<label for="tags">Provide some tags to describe the API</label>
+					<input type="text" id="tags" name="tags">
+					<p>Please use ',' to separate the tags</p>
 				</fieldset>
 			
 				<menu>

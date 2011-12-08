@@ -25,7 +25,7 @@
 </head>
 <body>
 	<%
-	String redirectURL = "http://kmi-web17.open.ac.uk:8080/apis/APIs?scope=classify";
+	String redirectURL = "http://apisurvey.kmi.open.ac.uk/APIs?scope=classify&URI="+ request.getParameter("nextURI");
     response.sendRedirect(redirectURL);%>
 </body>
 </html>

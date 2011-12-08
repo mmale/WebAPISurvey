@@ -155,7 +155,9 @@ public class StoreManagerImpl implements StoreManager, QueryExecutor{
 			repoModel.addStatement(surveyEntryInst, hasDateTimeUri, timeInstantInst);
 
 			rdfRepositoryConnector.closeRepositoryModel(repoModel);
-		} catch (Exception ignored) {}
+		} catch (Exception ignored) {
+			System.out.println(ignored.getStackTrace());
+		}
 	}
 
 	//logger.store(apiUri, surveyId, userId, hasCategoryProperty, "http://www.kmi.open.ac.uk/survey/classification/" + surveyProperyValue, new Date());
