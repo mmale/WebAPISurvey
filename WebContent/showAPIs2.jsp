@@ -158,7 +158,6 @@
 				
 				<fieldset class="half" id="auth-fieldset">
 					<legend>Authentication</legend>
-					
 					<label for="auth-example">Authentication mechanism
 						<p>More details on 
 						<a href="auth.html" target="_newAuth">authentication approaches</a></p>		

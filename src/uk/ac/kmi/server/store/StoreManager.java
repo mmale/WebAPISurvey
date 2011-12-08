@@ -17,5 +17,5 @@ public interface StoreManager {
 	public void store(URI apiUri, String surveyId, URI userId, URI surveyPropertyName, String surveyProperyValue, Date time);// throws LogException;
 	//logger.store(agentUri, processId, classifiedItem, documentUri, "http://www.soa4all.eu/Save/" + element, new Date(), method);
 	
-	public void store(URI apiUri, String surveyId, URI userId, HashMap<String, String[]> parameters, Date time);// throws LogException;
+	public void store(URI apiUri, String surveyId, URI userId, HashMap<String, String[]> parameters, Date time) throws Exception;// throws LogException;
 }

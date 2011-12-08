@@ -26,8 +26,8 @@ public class PWAPIs {
 		config = new ConfigurationImpl(configPath);
 		try {
 			//rdfRepositoryConnector = new RDFRepositoryConnector(config.getRepositoryServerUri(), config.getPWRepositoryName());
-			rdfRepositoryConnector = new RDFRepositoryConnector(new uk.ac.kmi.server.store.URIImpl("http://localhost:8080/openrdf-sesame"), "ProgrammableWeb");
-			//rdfRepositoryConnector = new RDFRepositoryConnector(new uk.ac.kmi.server.store.URIImpl("http://localhost:8080/openrdf-sesame"), "ProgWeb");
+			//rdfRepositoryConnector = new RDFRepositoryConnector(new uk.ac.kmi.server.store.URIImpl("http://localhost:8080/openrdf-sesame"), "ProgrammableWeb");
+			rdfRepositoryConnector = new RDFRepositoryConnector(new uk.ac.kmi.server.store.URIImpl("http://localhost:8080/openrdf-sesame"), "ProgWeb");
 			
 			surveyRepositoryConnector = new RDFRepositoryConnector(new uk.ac.kmi.server.store.URIImpl("http://localhost:8080/openrdf-sesame"), "WebAPISurvey");
 			
@@ -165,7 +165,9 @@ public class PWAPIs {
 			QueryResultTable qrt = repoModel.sparqlSelect(queryString);
 			rdfRepositoryConnector.closeRepositoryModel(repoModel);
 			
-			return qrt.iterator().next();
+			QueryRow apiURI = qrt.iterator().next();
+			qrt.iterator().close();
+			return apiURI;
 	}
 	
 	public QueryRow getAPIsbyIndex(int index) throws RDFRepositoryException {

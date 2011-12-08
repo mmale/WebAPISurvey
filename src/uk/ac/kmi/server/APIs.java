@@ -76,7 +76,6 @@ public class APIs extends HttpServlet {
 				URI = apis.getLastSurveyAPI();
 				countOfSurveyEntriesForLastAPI = apis.getCountForLastSurveyAPI(URI);
 				
-				//only two classifications per API
 				if( countOfSurveyEntriesForLastAPI > 1) {
 					
 					//get next API
@@ -120,9 +119,16 @@ public class APIs extends HttpServlet {
 		request.setAttribute("api.name",apiName );
 		request.setAttribute("api.lastUpdated",apiLastUp );
 		
+		request.setAttribute("user", "");
 		
 		if( session != null ) {
 			session.setAttribute("apiURL", apiHome);
+			
+			if(session.getAttribute("user") != null)
+				if(session.getAttribute("user").toString().trim() != "" && 
+						session.getAttribute("user").toString() != "null"){
+					request.setAttribute("user", session.getAttribute("user"));
+			}
 		}
 		
 		try {
@@ -165,6 +171,8 @@ public class APIs extends HttpServlet {
 			}
 		}
 		
+		classesResult.iterator().close();
+		
 		//allClassesHTML = allClassesHTML + "<input type='submit' value='Submit' /> </form>";
 		
 		request.setAttribute("classes.all",allClassesHTML );
@@ -173,7 +181,6 @@ public class APIs extends HttpServlet {
 		//request.getRequestDispatcher("/showAPIs2.jsp").forward(request,response);
 		//Only for classification
 		request.getRequestDispatcher("/showAPIs3.jsp").forward(request,response);
-		
 	}
 
 	/**

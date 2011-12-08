@@ -61,8 +61,6 @@ public class StoreClassification extends HttpServlet {
 				 documentUri= "http://www.kmi.open.ac.uk/apiUri/sessionEmpty" + currentTime;
 			 }
 	    	sessionId = new URIImpl("http://www.kmi.open.ac.uk/session/"+ session.getId());
-	    	
-	    	//request.setAttribute("nextURI",session.getAttribute("nextURI"));
 		}
 	    
 		initializeStore();
@@ -81,20 +79,21 @@ public class StoreClassification extends HttpServlet {
 	      }
 	    } // while
 	    
-	    /*if(parameters.containsKey("user")){
-	    	session.setAttribute("user", parameters.get("user")[0]);
-	    }*/
-	    
 	    URIImpl URI = new URIImpl(documentUri);
-	    //String newSurveyEntryId = 
-	    storeInit.addFormData(URI, processId, sessionId, parameters);
 	    
-	    //request.setAttribute("newSurveyEntryId",newSurveyEntryId);
+	    try {
+			storeInit.addFormData(URI, processId, sessionId, parameters);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    
-	    //request.setAttribute("URI", URI.toString());
+		if(parameters.containsKey("user") && session != null){
+			session.setAttribute("user", parameters.get("user")[0].toString());
+		}
 	    //request.getRequestDispatcher("/success.jsp").forward(request, response);
 	    
-	   //Only for classify
+	    //Only for classify
 	    request.getRequestDispatcher("redirect.jsp").forward(request, response);
 	  }
 

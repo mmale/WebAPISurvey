@@ -93,7 +93,12 @@ public class InitializeStore {
 	}
 	
 	public void addFormData(URI apiUri, String surveyId, URI userId, HashMap<String, String[]> parameters) {
-		if (logger != null) 
-			logger.store(apiUri, surveyId, userId, parameters, new Date());
+		if (logger != null)
+			try {
+				logger.store(apiUri, surveyId, userId, parameters, new Date());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 }

@@ -87,7 +87,7 @@ public class StoreManagerImpl implements StoreManager, QueryExecutor{
 	}
 
 	// creates triples for parameters
-	public void store(URI apiUri, String surveyId, URI userId, HashMap<String, String[]> parameters, Date time) {
+	public void store(URI apiUri, String surveyId, URI userId, HashMap<String, String[]> parameters, Date time) throws Exception {
 		try {
 			
 			RepositoryModel repoModel = rdfRepositoryConnector.openRepositoryModel();
@@ -119,7 +119,7 @@ public class StoreManagerImpl implements StoreManager, QueryExecutor{
 				//if (param.equals("updated")) dataType = dateDataType;
 					
 				for (int i = 0; i < values.length; i++) { 
-					System.out.println(surveyEntryInst.toString() + " " + propertyUri.toString() + " = " + values[i]);
+					//System.out.println(surveyEntryInst.toString() + " " + propertyUri.toString() + " = " + values[i]);
 					if (values[i].trim() != "") {
 						//for ignoring debug parameter
 						if (values[i].trim() != "null") {
@@ -129,12 +129,12 @@ public class StoreManagerImpl implements StoreManager, QueryExecutor{
 				}
 				
 				//specific processing (add new triples)
-				if (param.equals("tags")) {
+				/*if (param.equals("tags")) {
 					values = values[0].split(",");
 					for (int i = 0; i < values.length; i++) { 
 						if (values[i].trim() != "") repoModel.addStatement(surveyEntryInst, tagPropertyUri, repoModel.createURI("http://kmi.open.ac.uk/resource/tags/" + values[i].trim()));
 					}
-				}
+				}*/
 			}
 			
 			org.ontoware.rdf2go.model.node.URI surveyInst = repoModel.createURI(surveyId);
@@ -156,7 +156,8 @@ public class StoreManagerImpl implements StoreManager, QueryExecutor{
 
 			rdfRepositoryConnector.closeRepositoryModel(repoModel);
 		} catch (Exception ignored) {
-			System.out.println(ignored.getStackTrace());
+			//System.out.print(ignored.getStackTrace());
+			throw new Exception(ignored);
 		}
 	}
 
